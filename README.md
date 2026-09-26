@@ -99,6 +99,25 @@ Advanced TShock settings live in `data/tshock/config.json`.
 
 ---
 
+## Plugins (optional QoL)
+One command installs three small plugins, lets every player use them and the normal
+vanilla actions TShock blocks for guests (wormhole potions, pylons, summoning bosses,
+assigning NPC houses…), then restarts the server:
+
+```bash
+git pull && sudo ./scripts/plugins.sh
+```
+
+| Command | What it does |
+|---|---|
+| `/back` | Teleport to where you last died |
+| `/tpa Name` · `/atp` · `/dtp` | Ask to teleport to a friend · accept · deny |
+| `/npchome` | Send town NPCs back to their houses |
+
+Remove them again with `sudo ./scripts/plugins.sh --remove`.
+
+---
+
 ## Updating
 When Terraria gets a patch, TShock usually follows within a few days.
 
