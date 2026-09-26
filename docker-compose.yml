@@ -1,0 +1,30 @@
+services:
+  terraria:
+    image: ghcr.io/pryaxis/tshock:${TSHOCK_VERSION}
+    container_name: terraria
+    restart: unless-stopped
+    ports:
+      - "${SERVER_PORT}:7777"
+    volumes:
+      - ./data/tshock:/tshock     # config.json, database, logs, TShock's own backups
+      - ./data/worlds:/worlds     # the .wld world file
+      - ./data/plugins:/plugins   # empty — no mods/plugins
+    command:
+      - -world
+      - /worlds/${WORLD_NAME}.wld
+      - -worldname
+      - ${WORLD_NAME}
+      - -autocreate           # only creates the world if it doesn't exist yet
+      - ${WORLD_SIZE}
+      - -difficulty
+      - ${DIFFICULTY}
+      - -port
+      - "7777"
+      - -maxplayers
+      - ${MAX_PLAYERS}
+    stdin_open: true          # lets you type server commands via `docker attach`
+    tty: true
+    stop_signal: SIGINT       # TShock saves the world and shuts down cleanly on SIGINT
+    stop_grace_period: 60s
+    environment:
+      - TZ=${TZ}
