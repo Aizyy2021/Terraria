@@ -53,7 +53,17 @@ The script installs Docker, opens the firewall, asks you to choose a server pass
 
 To change the world name, size or player count, edit `.env` **before** running setup (`cp .env.example .env && nano .env`).
 
-### 3. Become admin
+### 3. Let everyone play normally
+TShock is made for public servers, so out of the box it blocks lots of normal gameplay
+(wormhole potions, pylons, summoning bosses, fast mining…) for non-admins. Unlock it all:
+
+```bash
+sudo ./scripts/perms.sh
+```
+
+Cheats stay admin-only: `/item`, `/give`, `/tp`, `/godmode`, `/time` and similar.
+
+### 4. Become admin
 The setup script prints an **admin setup code**. Then, in-game:
 
 ```
