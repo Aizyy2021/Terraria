@@ -130,8 +130,13 @@ Remove them again with `sudo ./scripts/plugins.sh --remove`.
 
 ---
 
-## Discord notifications (optional)
-Posts "➕ Name joined", "➖ Name left" and "🟢 Server is online" to a Discord channel.
+## Discord status (optional)
+One message in your Discord channel that **updates itself** instead of posting new ones:
+
+- 🟢 Online / 🔴 Offline, and since when
+- Server address and players online (`2 / 8`, with names)
+- Recent activity: joins, leaves, restarts, with times shown in each viewer's timezone
+
 Player IPs are never sent.
 
 1. In Discord: channel **⚙ Edit Channel → Integrations → Webhooks → New Webhook → Copy Webhook URL**.
@@ -139,8 +144,8 @@ Player IPs are never sent.
    ```bash
    git pull && sudo ./scripts/discord.sh
    ```
-   Paste the URL when asked. A test message confirms it works.
 
+Change the heading with `DISCORD_TITLE=` in `.env`, then re-run `sudo ./scripts/discord.sh`.
 Turn it off with `sudo ./scripts/discord.sh --off`. The game server is never restarted for this.
 
 ---
