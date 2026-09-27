@@ -78,6 +78,10 @@ else
   echo "ufw not found — make sure TCP port ${SERVER_PORT} is open in your provider's firewall."
 fi
 
+step "Turning on anti-spam protection"
+chmod +x scripts/*.sh
+./scripts/block-ip.sh --apply
+
 step "Scheduling nightly backups (05:00)"
 cat > /etc/cron.d/terraria-backup <<CRON
 0 5 * * * root ${ROOT}/scripts/backup.sh >> ${ROOT}/backups/backup.log 2>&1

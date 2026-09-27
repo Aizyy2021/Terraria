@@ -89,6 +89,7 @@ Run these on the VPS, inside the `terraria` folder.
 | Stop / start | `docker compose stop` / `docker compose up -d` |
 | Backup now | `sudo ./scripts/backup.sh` |
 | Restore a backup | `sudo ./scripts/restore.sh backups/terraria_<date>.tar.gz` |
+| Anti-spam protection on | `sudo ./scripts/block-ip.sh --apply` |
 | Block a spammer's IP | `sudo ./scripts/block-ip.sh 1.2.3.4` |
 
 The server saves the world automatically and when it's stopped.
