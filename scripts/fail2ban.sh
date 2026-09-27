@@ -19,6 +19,7 @@ case "${1:-}" in
 esac
 
 echo "==> Installing fail2ban"
+apt-get update -qq
 DEBIAN_FRONTEND=noninteractive apt-get install -y -qq fail2ban python3-systemd >/dev/null
 
 # Never ban the IP you're connected from right now.
