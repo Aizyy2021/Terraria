@@ -28,3 +28,20 @@ services:
     stop_grace_period: 60s
     environment:
       - TZ=${TZ}
+
+  # Posts joins/leaves to Discord. Enabled by scripts/discord.sh
+  # (sets COMPOSE_PROFILES=discord in .env).
+  discord:
+    image: python:3.13-alpine
+    container_name: terraria-discord
+    profiles: ["discord"]
+    restart: unless-stopped
+    volumes:
+      - ./data/tshock/logs:/logs:ro
+      - ./scripts/discord_notify.py:/app/discord_notify.py:ro
+    command: ["python", "-u", "/app/discord_notify.py"]
+    environment:
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL:-}
+      - SERVER_NAME=${WORLD_NAME}
+      - MAX_PLAYERS=${MAX_PLAYERS}
+      - TZ=${TZ}

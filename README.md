@@ -119,6 +119,21 @@ Remove them again with `sudo ./scripts/plugins.sh --remove`.
 
 ---
 
+## Discord notifications (optional)
+Posts "➕ Name joined", "➖ Name left" and "🟢 Server is online" to a Discord channel.
+Player IPs are never sent.
+
+1. In Discord: channel **⚙ Edit Channel → Integrations → Webhooks → New Webhook → Copy Webhook URL**.
+2. On the VPS:
+   ```bash
+   git pull && sudo ./scripts/discord.sh
+   ```
+   Paste the URL when asked. A test message confirms it works.
+
+Turn it off with `sudo ./scripts/discord.sh --off`. The game server is never restarted for this.
+
+---
+
 ## Updating
 When Terraria gets a patch, TShock usually follows within a few days.
 
