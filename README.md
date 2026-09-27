@@ -91,6 +91,7 @@ Run these on the VPS, inside the `terraria` folder.
 | Restore a backup | `sudo ./scripts/restore.sh backups/terraria_<date>.tar.gz` |
 | Anti-spam protection on | `sudo ./scripts/block-ip.sh --apply` |
 | Block a spammer's IP | `sudo ./scripts/block-ip.sh 1.2.3.4` |
+| Stop SSH password guessing | `sudo ./scripts/fail2ban.sh` (`--status` to see bans) |
 
 The server saves the world automatically and when it's stopped.
 
