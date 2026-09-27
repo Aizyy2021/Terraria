@@ -22,8 +22,13 @@ echo "==> Installing fail2ban"
 apt-get update -qq
 DEBIAN_FRONTEND=noninteractive apt-get install -y -qq fail2ban python3-systemd >/dev/null
 
-# Never ban the IP you're connected from right now.
-me="${SSH_CLIENT%% *}"
+# Never ban the IP you're connected from right now. sudo drops SSH_CLIENT,
+# so fall back to the address `who` reports for this terminal.
+me="${SSH_CLIENT:-}"
+me="${me%% *}"
+if [[ -z "$me" ]]; then
+  me="$(who -m 2>/dev/null | grep -oE '\(([0-9]{1,3}\.){3}[0-9]{1,3}\)' | tr -d '()' || true)"
+fi
 
 # Ubuntu images without rsyslog only log SSH to the systemd journal.
 if [[ -f /var/log/auth.log ]]; then backend=auto; else backend=systemd; fi
