@@ -92,6 +92,7 @@ Run these on the VPS, inside the `terraria` folder.
 | Anti-spam protection on | `sudo ./scripts/block-ip.sh --apply` |
 | Block a spammer's IP | `sudo ./scripts/block-ip.sh 1.2.3.4` |
 | Stop SSH password guessing | `sudo ./scripts/fail2ban.sh` (`--status` to see bans) |
+| Auto-restart when frozen | `sudo ./scripts/watchdog.sh` (`--status` to see restarts) |
 
 The server saves the world automatically and when it's stopped.
 

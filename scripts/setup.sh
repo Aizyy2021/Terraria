@@ -88,6 +88,9 @@ cat > /etc/cron.d/terraria-backup <<CRON
 CRON
 chmod +x scripts/*.sh
 
+step "Installing the freeze watchdog"
+./scripts/watchdog.sh
+
 step "Starting the server"
 docker compose pull
 docker compose up -d
