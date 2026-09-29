@@ -14,14 +14,15 @@ import os
 import re
 import subprocess
 import time
-import urllib.error
-import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
+
+from discord_webhook import read_env, request
 
 ROOT = Path(__file__).resolve().parent.parent
 LOG_DIR = ROOT / "data" / "tshock" / "logs"
 STATE_FILE = ROOT / "data" / "discord-status.json"
+INCIDENTS = ROOT / "data" / "incidents"
 
 LINE = re.compile(r"^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) - [^:]+: \w+: (.*)$")
 JOIN = re.compile(r"^(?P<name>.+) \([^)]*\) from '[^']*' group(?: from '[^']*')? joined\. \(\d+/\d+\)$")
@@ -32,18 +33,6 @@ MAX_EVENTS = 8
 POLL_SECONDS = 2
 STATUS_EVERY = 15
 MIN_EDIT_GAP = 3
-
-
-def read_env():
-    env = {}
-    for line in (ROOT / ".env").read_text().splitlines():
-        if "=" in line and not line.lstrip().startswith("#"):
-            key, value = line.split("=", 1)
-            value = value.strip()
-            if len(value) >= 2 and value[0] == value[-1] and value[0] in "'\"":
-                value = value[1:-1]
-            env[key.strip()] = value
-    return env
 
 
 ENV = read_env()
@@ -102,6 +91,16 @@ def escape(name):
     return re.sub(r"([\\*_`~|>])", r"\\\1", name)
 
 
+def health():
+    """Automatic restarts in the last 7 days, from the watchdog's incident reports."""
+    week_ago = time.time() - 7 * 86400
+    times = sorted(p.stat().st_mtime for p in INCIDENTS.glob("*.txt") if p.stat().st_mtime > week_ago)
+    if not times:
+        return "✓  Stable · no auto-restarts this week"
+    n = len(times)
+    return f"{n} auto-restart{'s' if n > 1 else ''} this week · last <t:{int(times[-1])}:R>"
+
+
 def build_embed(state):
     running = state.get("running", False)
     since = state.get("since")
@@ -115,6 +114,7 @@ def build_embed(state):
     if ADDRESS:
         fields.append({"name": "Address", "value": f"`{ADDRESS}:{PORT}`", "inline": True})
     fields.append({"name": "Players", "value": f"{len(online) if running else 0} / {MAX_PLAYERS}", "inline": True})
+    fields.append({"name": "Health", "value": health(), "inline": False})
     fields.append({
         "name": "Online now",
         "value": ", ".join(escape(n) for n in online) if running and online else "*Nobody*",
@@ -142,27 +142,6 @@ def build_embed(state):
         "footer": {"text": "Last updated"},
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
-
-
-def request(method, url, payload):
-    body = json.dumps(payload).encode()
-    for _ in range(5):
-        req = urllib.request.Request(url, data=body, method=method, headers={
-            "Content-Type": "application/json", "User-Agent": "terraria-status",
-        })
-        try:
-            with urllib.request.urlopen(req, timeout=15) as resp:
-                data = resp.read()
-                return resp.status, json.loads(data) if data else {}
-        except urllib.error.HTTPError as e:
-            if e.code == 429:
-                time.sleep(float(e.headers.get("Retry-After", "2")))
-                continue
-            return e.code, {}
-        except OSError as e:
-            print(f"Could not reach Discord: {e}", flush=True)
-            time.sleep(5)
-    return None, {}
 
 
 def publish(state):
@@ -269,6 +248,12 @@ def main():
                 if since != state.get("since"):
                     dirty = True
                 state["running"], state["since"] = running, since
+
+        # New watchdog incident reports change the Health line.
+        h = health()
+        if h != state.get("health"):
+            state["health"] = h
+            dirty = True
 
         # A new log file means the server started a new session.
         latest = newest_log()

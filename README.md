@@ -138,6 +138,10 @@ One message in your Discord channel that **updates itself** instead of posting n
 - 🟢 Online / 🔴 Offline, and since when
 - Server address and players online (`2 / 8`, with names)
 - Recent activity: joins, leaves, restarts, with times shown in each viewer's timezone
+- Health: automatic restarts this week
+
+If the server freezes or crashes, the watchdog posts **one alert** below the status message
+and edits it to *recovered* once players can join again.
 
 Player IPs are never sent.
 
