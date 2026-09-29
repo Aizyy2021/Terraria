@@ -24,7 +24,7 @@ step "Creating .env"
 if [[ ! -f .env ]]; then
   cp .env.example .env
 fi
-set -a; source .env; set +a
+source scripts/lib.sh; load_env
 if [[ -z "${SERVER_PASSWORD:-}" ]]; then
   while true; do
     read -rsp "Choose a server password for your friends: " pw1; echo
@@ -44,7 +44,7 @@ p = pathlib.Path(".env")
 p.write_text(re.sub(r"(?m)^SERVER_PASSWORD=.*$", lambda _: f"SERVER_PASSWORD='{sys.argv[1]}'", p.read_text()))
 PY
   chmod 600 .env
-  set -a; source .env; set +a
+  load_env
 fi
 
 step "Preparing folders and TShock config"

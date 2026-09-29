@@ -69,7 +69,7 @@ if ! grep -qE '^SERVER_ADDRESS=.+' .env; then
   ip="$(curl -fsS4 https://ifconfig.me 2>/dev/null || true)"
   [[ -n "$ip" ]] && set_env SERVER_ADDRESS "$ip"
 fi
-grep -qE '^DISCORD_TITLE=' .env || set_env DISCORD_TITLE "Terraria Server"
+grep -qE '^DISCORD_TITLE=' .env || set_env DISCORD_TITLE "'Terraria Server'"
 chmod 600 .env
 
 # Start fresh: a new webhook means a new message.

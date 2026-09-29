@@ -4,7 +4,7 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
-set -a; source .env; set +a
+source scripts/lib.sh; load_env
 
 stamp="$(date +%Y-%m-%d_%H%M)"
 tar -czf "backups/terraria_${stamp}.tar.gz" --exclude='data/tshock/logs' data
