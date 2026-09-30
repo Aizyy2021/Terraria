@@ -50,5 +50,5 @@ systemctl enable terraria-watchdog >/dev/null
 systemctl restart terraria-watchdog
 sleep 2
 systemctl is-active --quiet terraria-watchdog \
-  && echo "Watchdog is running. A frozen server is now restarted automatically within ~3 minutes." \
+  && echo "Watchdog is running. A frozen server is now restarted automatically within ~4 minutes." \
   || { journalctl -u terraria-watchdog -n 20 --no-pager >&2; exit 1; }

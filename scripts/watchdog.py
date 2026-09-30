@@ -4,7 +4,7 @@ Docker already restarts the container if the server *crashes*, but a frozen
 server keeps running while nobody can join. Every minute this knocks on the
 game port the way a player would (a Terraria connect request) and waits for
 the game to answer. Any answer — even "wrong version" — means the game loop
-is alive. After 3 missed answers in a row it saves diagnostics to
+is alive. After 2 missed answers in a row it saves diagnostics to
 data/incidents/ and restarts the container.
 
 It also notices when the server crashed and Docker restarted it.
@@ -28,9 +28,9 @@ from discord_webhook import edit, post, read_env
 ROOT = Path(__file__).resolve().parent.parent
 INCIDENTS = ROOT / "data" / "incidents"
 
-INTERVAL = 60          # seconds between checks
+INTERVAL = 120         # seconds between checks (each one adds a "was booted" line to the log)
 TIMEOUT = 10           # seconds to wait for the game to answer
-FAILS_BEFORE_RESTART = 3
+FAILS_BEFORE_RESTART = 2
 STARTUP_GRACE = 240    # seconds to leave a freshly (re)started server alone
 KEEP_INCIDENTS = 20
 STILL_DOWN_AFTER = 600 # seconds before an alert escalates to "still down"
