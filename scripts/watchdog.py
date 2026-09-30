@@ -1,7 +1,7 @@
 """Restarts the Terraria server when it freezes.
 
 Docker already restarts the container if the server *crashes*, but a frozen
-server keeps running while nobody can join. Every minute this knocks on the
+server keeps running while nobody can join. Every two minutes this knocks on the
 game port the way a player would (a Terraria connect request) and waits for
 the game to answer. Any answer — even "wrong version" — means the game loop
 is alive. After 2 missed answers in a row it saves diagnostics to
