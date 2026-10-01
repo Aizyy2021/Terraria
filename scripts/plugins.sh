@@ -6,14 +6,15 @@
 #   Back             /back           teleport to where you last died
 #   TeleportRequest  /tpa <player>   ask to teleport to a friend (/atp accept, /dtp deny)
 #   TownNPCHomes     /npchome        send town NPCs back to their houses
+#   BanNpc           /bm add <id>    stop an NPC from spawning (admins; /bm list, /bm del <id>)
 #
 # To remove all plugins:  sudo ./scripts/plugins.sh --remove
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-PLUGINS=(Back TeleportRequest TownNPCHomes)
-LIBS=(LazyAPI linq2db)   # shared libraries Back depends on
+PLUGINS=(Back TeleportRequest TownNPCHomes BanNpc)
+LIBS=(LazyAPI linq2db)   # shared libraries Back and BanNpc depend on
 BUNDLE_URL="https://github.com/UnrealMultiple/TShockPlugin/releases/download/V1.0.0.0/Plugins.zip"
 
 # Vanilla actions guests can't do by default in TShock, plus the plugin commands.
@@ -100,4 +101,5 @@ echo "    /back            go back to where you died"
 echo "    /tpa <player>    ask to teleport to someone"
 echo "    /atp  /dtp       accept / deny a request"
 echo "    /npchome         send NPCs back home"
+echo "  Admins:  /bm add <npc id>   block an NPC from spawning"
 echo "────────────────────────────────────────────"
