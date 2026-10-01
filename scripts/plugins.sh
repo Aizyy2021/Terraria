@@ -7,14 +7,16 @@
 #   TeleportRequest  /tpa <player>   ask to teleport to a friend (/atp accept, /dtp deny)
 #   TownNPCHomes     /npchome        send town NPCs back to their houses
 #   BanNpc           /bm add <id>    stop an NPC from spawning (admins; /bm list, /bm del <id>)
+#   AdditionalPylons                 place up to 2 of each pylon type
+#                                    (limits in data/tshock/AdditionalPylons*.json)
 #
 # To remove all plugins:  sudo ./scripts/plugins.sh --remove
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-PLUGINS=(Back TeleportRequest TownNPCHomes BanNpc)
-LIBS=(LazyAPI linq2db)   # shared libraries Back and BanNpc depend on
+PLUGINS=(Back TeleportRequest TownNPCHomes BanNpc AdditionalPylons)
+LIBS=(LazyAPI linq2db)   # shared libraries several of these depend on
 BUNDLE_URL="https://github.com/UnrealMultiple/TShockPlugin/releases/download/V1.0.0.0/Plugins.zip"
 
 # Vanilla actions guests can't do by default in TShock, plus the plugin commands.
@@ -24,6 +26,7 @@ PERMS=(
   tshock.npc.startinvasion tshock.npc.startdd2 tshock.world.movenpc tshock.world.paint
   tshock.world.worldupgrades tshock.warp tshock.whisper
   back tprequest.tpat tprequest.gettpr tprequest.tpauto
+  AdditionalPylons
 )
 
 if [[ $EUID -ne 0 ]]; then
@@ -101,5 +104,6 @@ echo "    /back            go back to where you died"
 echo "    /tpa <player>    ask to teleport to someone"
 echo "    /atp  /dtp       accept / deny a request"
 echo "    /npchome         send NPCs back home"
+echo "  Pylons:  everyone can place up to 2 of each type"
 echo "  Admins:  /bm add <npc id>   block an NPC from spawning"
 echo "────────────────────────────────────────────"
